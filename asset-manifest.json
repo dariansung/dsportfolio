@@ -1,0 +1,30 @@
+{
+  "files": {
+    "main.css": "/dsportfolio/static/css/main.60812286.chunk.css",
+    "main.js": "/dsportfolio/static/js/main.28feb5b0.chunk.js",
+    "main.js.map": "/dsportfolio/static/js/main.28feb5b0.chunk.js.map",
+    "runtime-main.js": "/dsportfolio/static/js/runtime-main.253436ee.js",
+    "runtime-main.js.map": "/dsportfolio/static/js/runtime-main.253436ee.js.map",
+    "static/js/2.f81849c0.chunk.js": "/dsportfolio/static/js/2.f81849c0.chunk.js",
+    "static/js/2.f81849c0.chunk.js.map": "/dsportfolio/static/js/2.f81849c0.chunk.js.map",
+    "index.html": "/dsportfolio/index.html",
+    "precache-manifest.86dd321dcef9c2748ec9f40d08004fb4.js": "/dsportfolio/precache-manifest.86dd321dcef9c2748ec9f40d08004fb4.js",
+    "service-worker.js": "/dsportfolio/service-worker.js",
+    "static/css/main.60812286.chunk.css.map": "/dsportfolio/static/css/main.60812286.chunk.css.map",
+    "static/js/2.f81849c0.chunk.js.LICENSE.txt": "/dsportfolio/static/js/2.f81849c0.chunk.js.LICENSE.txt",
+    "static/media/SAD2020Mendoba.jpeg": "/dsportfolio/static/media/SAD2020Mendoba.09a296f1.jpeg",
+    "static/media/banquet2019.jpeg": "/dsportfolio/static/media/banquet2019.585e0a28.jpeg",
+    "static/media/beachstar.jpeg": "/dsportfolio/static/media/beachstar.26c1cb98.jpeg",
+    "static/media/kayaking.jpeg": "/dsportfolio/static/media/kayaking.e4f504e7.jpeg",
+    "static/media/profile.png": "/dsportfolio/static/media/profile.dc8ec470.png",
+    "static/media/spotifyndfriends.png": "/dsportfolio/static/media/spotifyndfriends.279a8eda.png",
+    "static/media/thanksgivingchapel2019.jpeg": "/dsportfolio/static/media/thanksgivingchapel2019.9fb98729.jpeg",
+    "static/media/uwu.jpg": "/dsportfolio/static/media/uwu.8ea67604.jpg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.253436ee.js",
+    "static/js/2.f81849c0.chunk.js",
+    "static/css/main.60812286.chunk.css",
+    "static/js/main.28feb5b0.chunk.js"
+  ]
+}
