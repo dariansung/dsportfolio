@@ -4,6 +4,7 @@ import Home from './Home';
 import Projects from './Projects';
 import Images from './Images';
 import Videos from './Videos';
+import GuestBook from './GuestBook';
 
 export class Body extends Component {
     displayContent = () => {
@@ -24,7 +25,11 @@ export class Body extends Component {
         else if(activeTab === 4){
             return <Videos/>
         }
+        else if(activeTab === 5){
+            return <GuestBook/>
+        }
     }
+    
     render(){
         return(this.displayContent());
     }
