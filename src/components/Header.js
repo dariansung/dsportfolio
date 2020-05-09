@@ -15,6 +15,9 @@ export class Header extends Component {
         else if (id === 4){
             return <h2>Videos</h2>
         }
+        else if (id === 5){
+            return <h2>Guest Book</h2>
+        }
     }
     
     render(){
