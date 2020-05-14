@@ -202,3 +202,16 @@
   margin: 0;
   padding-top: 8px;
 }
+
+.movies-main {
+  margin: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 300px);
+  gap: 4px;
+  justify-content: center;
+}
+
+.movies-main > img:hover {
+  cursor: pointer;
+  opacity: 0.5
+}

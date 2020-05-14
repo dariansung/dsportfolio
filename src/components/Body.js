@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import SimpleReactLightbox from 'simple-react-lightbox';
 import Home from './Home';
 import Projects from './Projects';
 import Images from './Images';
 import Videos from './Videos';
 import GuestBook from './GuestBook';
+import Movies from './Movies';
 
 export class Body extends Component {
     displayContent = () => {
@@ -16,17 +16,16 @@ export class Body extends Component {
             return <Projects/>
         }
         else if(activeTab === 3){
-            return(
-                <SimpleReactLightbox>
-                    <Images/>
-                </SimpleReactLightbox>
-                )
+            return <Images/>
         }
         else if(activeTab === 4){
             return <Videos/>
         }
         else if(activeTab === 5){
             return <GuestBook/>
+        }
+        else if(activeTab === 6){
+            return <Movies/>
         }
     }
     
