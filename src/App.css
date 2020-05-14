@@ -158,6 +158,10 @@
   width: 100%;
 }
 
+.msg-form-button:hover {
+  cursor: pointer;
+}
+
 #form-error {
   color: red;
 }
@@ -214,4 +218,22 @@
 .movies-main > img:hover {
   cursor: pointer;
   opacity: 0.5
+}
+
+.movie-lightbox {
+  position: fixed;
+  z-index: 150;
+  top: 50%;
+  left: 50%;
+  margin-top: -230px;
+  margin-left: -332px;
+  justify-content: center;
+  background-color: white;
+  padding: 8px;
+}
+
+.movie-lightbox-text {
+  padding-left: 24px;
+  padding-right: 24px;
+  width: 300px;
 }

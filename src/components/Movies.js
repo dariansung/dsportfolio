@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { SRLWrapper } from 'simple-react-lightbox';
 import MoviePoster from './MoviePoster';
 
 export class Movies extends Component {
@@ -14,13 +13,11 @@ export class Movies extends Component {
     
     render(){
         return(
-            <SRLWrapper>
-                <div className="movies-main">
-                    {this.state.ids.map(id => {
-                        return <MoviePoster id={id}/>
-                    })}
-                </div>
-            </SRLWrapper>
+            <div className="movies-main">
+                {this.state.ids.map(id => {
+                    return <MoviePoster id={id}/>
+                })}
+            </div>
         )
     }
 }

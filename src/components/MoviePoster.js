@@ -13,7 +13,8 @@ export class MoviePoster extends Component {
             director: "",
             plot: "",
             poster: "",
-            imdbRating: ""
+            imdbRating: "",
+            lightboxVisible: false
         }
     }
 
@@ -24,18 +25,72 @@ export class MoviePoster extends Component {
                     title: response.data.Title,
                     director: response.data.Director,
                     poster: response.data.Poster,
-                    imdbRating: response.data.imdbRating
+                    imdbRating: response.data.imdbRating,
+                    plot: response.data.Plot
                 })
             })
     }
 
-    getDescription = () => {
-        return this.state.title + ", Director: " + this.state.director + ", IMDb Rating: " + this.state.imdbRating;
+    getOverlayStyle = () => {
+        let disp = 'none';
+        if(this.state.lightboxVisible)
+            disp = 'flex';
+        return ({
+            display: disp,
+            position: 'fixed',
+            zIndex: 100,
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            backgroundColor: `rgba(${0}, ${0}, ${0}, ${0.5})`,
+            justifyContent: 'center',
+            alignItems: 'center'
+        })
+    }
+
+    getLightboxStyle = () => {
+        let disp = 'none';
+        if(this.state.lightboxVisible)
+            disp = 'flex';
+        return ({
+            display: disp
+        })
+    }
+
+    openLightbox = () => {
+        let scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+        let scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        window.onscroll = function(){
+            this.window.scrollTo(scrollX, scrollY);
+        }
+        this.setState({
+            lightboxVisible: true
+        })
+    }
+
+    closeLightbox = () => {
+        window.onscroll = function(){}
+        this.setState({
+            lightboxVisible: false
+        })
     }
     
     render(){
         return (
-            <img src={this.state.poster} alt={this.getDescription()} onClick={this.openLightbox()}/>
+            <div className='poster'>
+                <img src={this.state.poster} alt={this.state.title} onClick={() => this.openLightbox()}/>
+                <div className='movie-lightbox-overlay' style={this.getOverlayStyle()} onClick={() => this.closeLightbox()}></div>
+                <div className='movie-lightbox' style={this.getLightboxStyle()}>
+                    <img src={this.state.poster} alt={this.state.title}/>
+                    <div className='movie-lightbox-text'>
+                        <h2>{this.state.title}</h2>
+                        <p>IMDb Rating: {this.state.imdbRating}</p>
+                        <p>{this.state.plot}</p>
+                        <p>Directed by {this.state.director}</p>
+                    </div>
+                </div>
+            </div>
         )
     }
 }
