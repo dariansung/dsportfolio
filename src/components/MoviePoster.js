@@ -19,7 +19,7 @@ export class MoviePoster extends Component {
     }
 
     componentDidMount = () => {
-        axios.get('http://www.omdbapi.com/?apikey=748f0661&i=' + this.props.id)
+        axios.get('https://www.omdbapi.com/?apikey=748f0661&i=' + this.props.id)
             .then(response => {
                 this.setState({
                     title: response.data.Title,
