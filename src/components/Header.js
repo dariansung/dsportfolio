@@ -18,6 +18,9 @@ export class Header extends Component {
         else if (id === 5){
             return <h2>Guest Book</h2>
         }
+        else if (id === 6){
+            return <h2>Movies</h2>
+        }
     }
     
     render(){

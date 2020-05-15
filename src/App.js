@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import SimpleReactLightbox from 'simple-react-lightbox';
 import './App.css';
 import Header from './components/Header'
 import TabList from './components/TabList';
@@ -40,6 +41,10 @@ export class App extends Component{
       {
         id: 5,
         title: "Guest Book"
+      },
+      {
+        id: 6,
+        title: "Movies"
       }
     ]
     return (
@@ -50,9 +55,11 @@ export class App extends Component{
           activeTab={this.state.activeTab}
           changeTab={this.changeTab}/>
         </div>
-        <div className="main-body">
-          <Body activeTab={this.state.activeTab}/>
-        </div>
+        <SimpleReactLightbox>
+          <div className="main-body">
+            <Body activeTab={this.state.activeTab}/>
+          </div>
+        </SimpleReactLightbox>
         <ScrollTop/>
       </div>
     );
