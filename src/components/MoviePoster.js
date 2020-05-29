@@ -1,34 +1,31 @@
 import React, { Component } from 'react';
-
-const axios = require('axios');
+import config from '../config';
+const firebase = require('firebase');
 
 export class MoviePoster extends Component {
     constructor(props){
         super(props);
         this.state = {
-            title: "",
-            year: "",
-            rated: "",
-            runtime: "",
-            director: "",
-            plot: "",
-            poster: "",
-            imdbRating: "",
             lightboxVisible: false
         }
     }
 
     componentDidMount = () => {
-        axios.get('https://www.omdbapi.com/?apikey=748f0661&i=' + this.props.id)
-            .then(response => {
-                this.setState({
-                    title: response.data.Title,
-                    director: response.data.Director,
-                    poster: response.data.Poster,
-                    imdbRating: response.data.imdbRating,
-                    plot: response.data.Plot
-                })
+        if (!firebase.apps.length) {
+            firebase.initializeApp(config);
+        }
+    }
+
+    deleteMovie = () => {
+        let ref = firebase.database().ref('movies/' + this.props.movie.imdbId);
+        ref.remove()
+            .then(() => {
+                console.log(this.props.movie.imdbId + " removed");
             })
+            .catch(error => {
+                console.log("Removal error: " + error.message);
+            })
+        this.closeLightbox();
     }
 
     getOverlayStyle = () => {
@@ -79,15 +76,16 @@ export class MoviePoster extends Component {
     render(){
         return (
             <div className='poster'>
-                <img src={this.state.poster} alt={this.state.title} onClick={() => this.openLightbox()}/>
+                <img src={this.props.movie.poster} alt={this.props.movie.title} onClick={() => this.openLightbox()}/>
                 <div className='movie-lightbox-overlay' style={this.getOverlayStyle()} onClick={() => this.closeLightbox()}></div>
                 <div className='movie-lightbox' style={this.getLightboxStyle()}>
-                    <img src={this.state.poster} alt={this.state.title}/>
+                    <img src={this.props.movie.poster} alt={this.props.movie.title}/>
                     <div className='movie-lightbox-text'>
-                        <h2>{this.state.title}</h2>
-                        <p>IMDb Rating: {this.state.imdbRating}</p>
-                        <p>{this.state.plot}</p>
-                        <p>Directed by {this.state.director}</p>
+                        <h2>{this.props.movie.title}</h2>
+                        <p>IMDb Rating: {this.props.movie.imdbRating}</p>
+                        <p>{this.props.movie.plot}</p>
+                        <p>Directed by {this.props.movie.director}</p>
+                        <button className="delete-movie-btn" onClick={this.deleteMovie}>Delete Movie</button>
                     </div>
                 </div>
             </div>
