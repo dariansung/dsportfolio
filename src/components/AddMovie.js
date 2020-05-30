@@ -25,7 +25,6 @@ export class AddMovie extends Component {
 
     handleSubmit = (e) => {
         e.preventDefault();
-        let hasError = false;
         axios.get('https://www.omdbapi.com/?apikey=748f0661&i=' + this.state.imdbId)
             .then(response => {
                 let ref = firebase.database().ref('movies/' + this.state.imdbId);
@@ -40,11 +39,7 @@ export class AddMovie extends Component {
             })
             .catch(error => {
                 console.log(error);
-                hasError = true;
             })
-        if(hasError) return;
-
-        
     }
 
     render(){

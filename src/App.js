@@ -49,6 +49,10 @@ export class App extends Component{
       {
         id: 7,
         title: "Add Movie"
+      },
+      {
+        id: 8,
+        title: "Create List"
       }
     ]
     return (

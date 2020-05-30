@@ -10,6 +10,8 @@ export class Movies extends Component {
     constructor(props){
         super(props);
         this.state = {
+            currentList: "All",
+            lists: ["All"],
             movies: []
         }
     }
@@ -18,24 +20,47 @@ export class Movies extends Component {
         if (!firebase.apps.length) {
             firebase.initializeApp(config);
         }
+        this.loadLists();
         this.loadMovies();
+    }
+
+    handleChange = (e) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        }, () => this.loadMovies());
+    }
+
+    loadLists = () => {
+        let ref = firebase.database().ref('lists');
+        ref.on('value', snapshot => {
+            let dbLists = ["All"];
+            snapshot.forEach(child => {
+                dbLists.push(child.val());
+            })
+            this.setState({lists: dbLists});
+        })
     }
 
     loadMovies = () => {
         let ref = firebase.database().ref('movies');
-        ref.on('value', snapshot => {
-            const state = snapshot.val();
+        ref.orderByChild('title').on('value', snapshot => {
             let dbMovies = [];
-            for(let id in state){
-                dbMovies.push({
-                    imdbId: state[id].imdbId,
-                    title: state[id].title,
-                    director: state[id].director,
-                    poster: state[id].poster,
-                    imdbRating: state[id].imdbRating,
-                    plot: state[id].plot
+            snapshot.forEach(child => {
+                let inList = false;
+                child.child('lists').forEach(listChild => {
+                    if(this.state.currentList === listChild.key) inList = true;
                 })
-            }
+                if(this.state.currentList === "All" || inList){
+                    dbMovies.push({
+                        imdbId: child.val().imdbId,
+                        title: child.val().title,
+                        director: child.val().director,
+                        poster: child.val().poster,
+                        imdbRating: child.val().imdbRating,
+                        plot: child.val().plot
+                    })
+                }
+            })
             this.setState({movies: dbMovies});
         })
     }
@@ -44,11 +69,15 @@ export class Movies extends Component {
         return(
             <div className="movies-main">
                 <div className="movies-bar">
-
+                    <select name="currentList" onChange={this.handleChange}>
+                        {this.state.lists.map(list => {
+                            return <option value={list}>{list}</option>
+                        })}
+                    </select>
                 </div>
                 <div className="movies-gallery">
                     {this.state.movies.map(item => {
-                        return <MoviePoster movie={item} delete={this.handleDelete}/>
+                        return <MoviePoster movie={item}/>
                     })}
                 </div>
             </div>

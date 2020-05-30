@@ -6,6 +6,7 @@ export class MoviePoster extends Component {
     constructor(props){
         super(props);
         this.state = {
+            availableLists: [],
             lightboxVisible: false
         }
     }
@@ -14,6 +15,7 @@ export class MoviePoster extends Component {
         if (!firebase.apps.length) {
             firebase.initializeApp(config);
         }
+        this.loadAvailableLists();
     }
 
     deleteMovie = () => {
@@ -26,6 +28,33 @@ export class MoviePoster extends Component {
                 console.log("Removal error: " + error.message);
             })
         this.closeLightbox();
+    }
+
+    loadAvailableLists = () => {
+        let listsRef = firebase.database().ref('lists');
+        let allLists = [];
+        listsRef.on('value', snapshot => {
+            snapshot.forEach(child => {
+                allLists.push(child.val());
+            })
+        })
+
+        let ref = firebase.database().ref('movies/' + this.props.movie.imdbId + '/lists');
+        ref.on('value', snapshot => {
+            snapshot.forEach(child => {
+                let removeIndex = allLists.indexOf(child.key, 0);
+                if(removeIndex >= 0){
+                    allLists.splice(removeIndex, 1);
+                }
+            })
+        })
+        this.setState({availableLists: allLists});
+    }
+
+    addToList = (list) => {
+        let ref = firebase.database().ref('movies/' + this.props.movie.imdbId + '/lists');
+        ref.update({[list]: true});
+        this.loadAvailableLists();
     }
 
     getOverlayStyle = () => {
@@ -85,6 +114,15 @@ export class MoviePoster extends Component {
                         <p>IMDb Rating: {this.props.movie.imdbRating}</p>
                         <p>{this.props.movie.plot}</p>
                         <p>Directed by {this.props.movie.director}</p>
+                        <div className="add-to-list-dropdown">
+                            <button className="add-to-list-btn">Add to List</button>
+                            <div className="add-to-list-options">
+                                {this.state.availableLists.map(list => {
+                                    return <p onClick={() => this.addToList(list)}>{list}</p>
+                                })}
+                                <p style={this.state.availableLists.length === 0 ? {display: 'block'} : {display:'none'}}>No lists to add to</p>
+                            </div>
+                        </div>
                         <button className="delete-movie-btn" onClick={this.deleteMovie}>Delete Movie</button>
                     </div>
                 </div>
