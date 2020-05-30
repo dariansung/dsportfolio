@@ -1,34 +1,60 @@
 import React, { Component } from 'react';
-
-const axios = require('axios');
+import config from '../config';
+const firebase = require('firebase');
 
 export class MoviePoster extends Component {
     constructor(props){
         super(props);
         this.state = {
-            title: "",
-            year: "",
-            rated: "",
-            runtime: "",
-            director: "",
-            plot: "",
-            poster: "",
-            imdbRating: "",
+            availableLists: [],
             lightboxVisible: false
         }
     }
 
     componentDidMount = () => {
-        axios.get('https://www.omdbapi.com/?apikey=748f0661&i=' + this.props.id)
-            .then(response => {
-                this.setState({
-                    title: response.data.Title,
-                    director: response.data.Director,
-                    poster: response.data.Poster,
-                    imdbRating: response.data.imdbRating,
-                    plot: response.data.Plot
-                })
+        if (!firebase.apps.length) {
+            firebase.initializeApp(config);
+        }
+        this.loadAvailableLists();
+    }
+
+    deleteMovie = () => {
+        let ref = firebase.database().ref('movies/' + this.props.movie.imdbId);
+        ref.remove()
+            .then(() => {
+                console.log(this.props.movie.imdbId + " removed");
             })
+            .catch(error => {
+                console.log("Removal error: " + error.message);
+            })
+        this.closeLightbox();
+    }
+
+    loadAvailableLists = () => {
+        let listsRef = firebase.database().ref('lists');
+        let allLists = [];
+        listsRef.on('value', snapshot => {
+            snapshot.forEach(child => {
+                allLists.push(child.val());
+            })
+        })
+
+        let ref = firebase.database().ref('movies/' + this.props.movie.imdbId + '/lists');
+        ref.on('value', snapshot => {
+            snapshot.forEach(child => {
+                let removeIndex = allLists.indexOf(child.key, 0);
+                if(removeIndex >= 0){
+                    allLists.splice(removeIndex, 1);
+                }
+            })
+        })
+        this.setState({availableLists: allLists});
+    }
+
+    addToList = (list) => {
+        let ref = firebase.database().ref('movies/' + this.props.movie.imdbId + '/lists');
+        ref.update({[list]: true});
+        this.loadAvailableLists();
     }
 
     getOverlayStyle = () => {
@@ -79,15 +105,27 @@ export class MoviePoster extends Component {
     render(){
         return (
             <div className='poster'>
-                <img src={this.state.poster} alt={this.state.title} onClick={() => this.openLightbox()}/>
+                <img src={this.props.movie.poster} alt={this.props.movie.title} onClick={() => this.openLightbox()}/>
                 <div className='movie-lightbox-overlay' style={this.getOverlayStyle()} onClick={() => this.closeLightbox()}></div>
                 <div className='movie-lightbox' style={this.getLightboxStyle()}>
-                    <img src={this.state.poster} alt={this.state.title}/>
+                    <img src={this.props.movie.poster} alt={this.props.movie.title}/>
                     <div className='movie-lightbox-text'>
-                        <h2>{this.state.title}</h2>
-                        <p>IMDb Rating: {this.state.imdbRating}</p>
-                        <p>{this.state.plot}</p>
-                        <p>Directed by {this.state.director}</p>
+                        <h2>{this.props.movie.title}</h2>
+                        <p>IMDb Rating: {this.props.movie.imdbRating}</p>
+                        <p>{this.props.movie.plot}</p>
+                        <p>Directed by {this.props.movie.director}</p>
+                        <div className="movie-lightbox-btns">
+                            <div className="add-to-list-dropdown">
+                                <button className="add-to-list-btn">Add to List</button>
+                                <div className="add-to-list-options">
+                                    {this.state.availableLists.map(list => {
+                                        return <p onClick={() => this.addToList(list)}>{list}</p>
+                                    })}
+                                    <p style={this.state.availableLists.length === 0 ? {display: 'block'} : {display:'none'}}>No lists to add to</p>
+                                </div>
+                            </div>
+                            <button className="delete-movie-btn" onClick={this.deleteMovie}>Delete Movie</button>
+                        </div>
                     </div>
                 </div>
             </div>

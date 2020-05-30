@@ -5,6 +5,8 @@ import Images from './Images';
 import Videos from './Videos';
 import GuestBook from './GuestBook';
 import Movies from './Movies';
+import AddMovie from './AddMovie';
+import CreateList from './CreateList';
 
 export class Body extends Component {
     displayContent = () => {
@@ -26,6 +28,12 @@ export class Body extends Component {
         }
         else if(activeTab === 6){
             return <Movies/>
+        }
+        else if(activeTab === 7){
+            return <AddMovie/>
+        }
+        else if(activeTab === 8){
+            return <CreateList/>
         }
     }
     

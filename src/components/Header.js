@@ -21,6 +21,12 @@ export class Header extends Component {
         else if (id === 6){
             return <h2>Movies</h2>
         }
+        else if (id === 7){
+            return <h2>Add Movie</h2>
+        }
+        else if (id === 8){
+            return <h2>Create List</h2>
+        }
     }
     
     render(){
