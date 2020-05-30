@@ -45,42 +45,68 @@ export class Movies extends Component {
 
     loadMovies = () => {
         let ref = firebase.database().ref('movies');
-        ref.limitToFirst(this.state.loadLimit).on('value', snapshot => {
-            let dbMovies = [];
-            let numLoaded = 0;
-            snapshot.forEach(child => {
-                let inList = false;
-                child.child('lists').forEach(listChild => {
-                    if(this.state.currentList === listChild.key) 
-                        inList = true;
-                })
-                let matchesSearch = false;
-                if(this.state.movieSearch === "" || child.val().title.toLowerCase().includes(this.state.movieSearch.toLowerCase())) 
-                    matchesSearch = true;
-                if((this.state.currentList === "All" || inList) && matchesSearch){
-                    dbMovies.push({
-                        imdbId: child.val().imdbId,
-                        title: child.val().title,
-                        director: child.val().director,
-                        poster: child.val().poster,
-                        imdbRating: child.val().imdbRating,
-                        plot: child.val().plot
-                    })
-                    numLoaded++;
-                }
-            })
-            this.setState({movies: dbMovies});
-            firebase.database().ref('movies').on('value', snapshot => {
-                let numMovies = 0;
+        if(this.state.currentList === "All"){
+            ref.limitToFirst(this.state.loadLimit).on('value', snapshot => {
+                let dbMovies = [];
+                let numLoaded = 0;
                 snapshot.forEach(child => {
-                    numMovies++;
+                    let matchesSearch = false;
+                    if(this.state.movieSearch === "" || child.val().title.toLowerCase().includes(this.state.movieSearch.toLowerCase())) 
+                        matchesSearch = true;
+                    if(matchesSearch){
+                        dbMovies.push({
+                            imdbId: child.val().imdbId,
+                            title: child.val().title,
+                            director: child.val().director,
+                            poster: child.val().poster,
+                            imdbRating: child.val().imdbRating,
+                            plot: child.val().plot
+                        })
+                        numLoaded++;
+                    }
                 })
-                if(numLoaded >= numMovies)
-                    this.setState({loadMoviesStyle: {display: 'none'}});
-                else
-                    this.setState({loadMoviesStyle: {display: 'block'}})
+                this.setState({movies: dbMovies});
+                firebase.database().ref('movies').on('value', snapshot => {
+                    let numMovies = 0;
+                    snapshot.forEach(child => {
+                        numMovies++;
+                    })
+                    if(numLoaded >= numMovies)
+                        this.setState({loadMoviesStyle: {display: 'none'}});
+                    else
+                        this.setState({loadMoviesStyle: {display: 'block'}})
+                })
             })
-        })
+        }
+        else{
+            ref.on('value', snapshot => {
+                let dbMovies = [];
+                snapshot.forEach(child => {
+                    let inList = false;
+                    child.child('lists').forEach(listChild => {
+                        if(this.state.currentList === listChild.key) 
+                            inList = true;
+                    })
+                    let matchesSearch = false;
+                    if(this.state.movieSearch === "" || child.val().title.toLowerCase().includes(this.state.movieSearch.toLowerCase())) 
+                        matchesSearch = true;
+                    if(inList && matchesSearch){
+                        dbMovies.push({
+                            imdbId: child.val().imdbId,
+                            title: child.val().title,
+                            director: child.val().director,
+                            poster: child.val().poster,
+                            imdbRating: child.val().imdbRating,
+                            plot: child.val().plot
+                        })
+                    }
+                })
+                this.setState({
+                    movies: dbMovies,
+                    loadMoviesStyle: {display: 'none'}
+                })
+            })
+        }
     }
 
     loadMore = () => {
