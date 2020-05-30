@@ -45,7 +45,7 @@ export class Movies extends Component {
 
     loadMovies = () => {
         let ref = firebase.database().ref('movies');
-        ref.orderByChild('title').limitToFirst(this.state.loadLimit).on('value', snapshot => {
+        ref.limitToFirst(this.state.loadLimit).on('value', snapshot => {
             let dbMovies = [];
             let numLoaded = 0;
             snapshot.forEach(child => {
