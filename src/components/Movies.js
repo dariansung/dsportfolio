@@ -12,6 +12,7 @@ export class Movies extends Component {
         this.state = {
             currentList: "All",
             lists: ["All"],
+            movieSearch: "",
             movies: []
         }
     }
@@ -50,7 +51,10 @@ export class Movies extends Component {
                 child.child('lists').forEach(listChild => {
                     if(this.state.currentList === listChild.key) inList = true;
                 })
-                if(this.state.currentList === "All" || inList){
+                let matchesSearch = false;
+                if(this.state.movieSearch === "" || child.val().title.toLowerCase().includes(this.state.movieSearch.toLowerCase())) 
+                    matchesSearch = true;
+                if((this.state.currentList === "All" || inList) && matchesSearch){
                     dbMovies.push({
                         imdbId: child.val().imdbId,
                         title: child.val().title,
@@ -74,6 +78,7 @@ export class Movies extends Component {
                             return <option value={list}>{list}</option>
                         })}
                     </select>
+                    <input type="text" name="movieSearch" onChange={this.handleChange} value={this.state.movieSearch}/>
                 </div>
                 <div className="movies-gallery">
                     {this.state.movies.map(item => {
