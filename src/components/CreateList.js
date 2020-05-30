@@ -26,12 +26,14 @@ export class CreateList extends Component{
         e.preventDefault();
         let ref = firebase.database().ref('lists');
         ref.push(this.state.listName);
+        this.setState({listName: ""})
     }
 
     render(){
         return(
             <div className="create-list-main">
                 <form className="create-list-form" onSubmit={this.handleSubmit}>
+                    <p>Enter list name:</p>
                     <input type="text" name="listName" onChange={this.handleChange} value={this.state.listName}/>
                     <button className="create-list-btn">Create List</button>
                 </form>

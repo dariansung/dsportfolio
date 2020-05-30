@@ -114,16 +114,18 @@ export class MoviePoster extends Component {
                         <p>IMDb Rating: {this.props.movie.imdbRating}</p>
                         <p>{this.props.movie.plot}</p>
                         <p>Directed by {this.props.movie.director}</p>
-                        <div className="add-to-list-dropdown">
-                            <button className="add-to-list-btn">Add to List</button>
-                            <div className="add-to-list-options">
-                                {this.state.availableLists.map(list => {
-                                    return <p onClick={() => this.addToList(list)}>{list}</p>
-                                })}
-                                <p style={this.state.availableLists.length === 0 ? {display: 'block'} : {display:'none'}}>No lists to add to</p>
+                        <div className="movie-lightbox-btns">
+                            <div className="add-to-list-dropdown">
+                                <button className="add-to-list-btn">Add to List</button>
+                                <div className="add-to-list-options">
+                                    {this.state.availableLists.map(list => {
+                                        return <p onClick={() => this.addToList(list)}>{list}</p>
+                                    })}
+                                    <p style={this.state.availableLists.length === 0 ? {display: 'block'} : {display:'none'}}>No lists to add to</p>
+                                </div>
                             </div>
+                            <button className="delete-movie-btn" onClick={this.deleteMovie}>Delete Movie</button>
                         </div>
-                        <button className="delete-movie-btn" onClick={this.deleteMovie}>Delete Movie</button>
                     </div>
                 </div>
             </div>

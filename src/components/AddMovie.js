@@ -36,6 +36,7 @@ export class AddMovie extends Component {
                     imdbRating: response.data.imdbRating,
                     plot: response.data.Plot
                 });
+                this.setState({imdbId: ""})
             })
             .catch(error => {
                 console.log(error);
@@ -46,6 +47,7 @@ export class AddMovie extends Component {
         return(
             <div className="add-movie-main" onSubmit={this.handleSubmit}>
                 <form className="add-movie-form">
+                    <p>Enter IMDb ID:</p>
                     <input type="text" name="imdbId" onChange={this.handleChange} value={this.state.imdbId} />
                     <button className="add-movie-btn">Add Movie</button>
                 </form>
