@@ -53,6 +53,10 @@ export class App extends Component{
       {
         id: 8,
         title: "Create List"
+      },
+      {
+        id: 9,
+        title: "Graph"
       }
     ]
     return (
