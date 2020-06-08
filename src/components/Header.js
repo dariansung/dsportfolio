@@ -27,6 +27,9 @@ export class Header extends Component {
         else if (id === 8){
             return <h2>Create List</h2>
         }
+        else if (id === 9){
+            return <h2>Graph</h2>
+        }
     }
     
     render(){

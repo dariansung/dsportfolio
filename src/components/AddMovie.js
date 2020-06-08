@@ -28,13 +28,14 @@ export class AddMovie extends Component {
         axios.get('https://www.omdbapi.com/?apikey=748f0661&i=' + this.state.imdbId)
             .then(response => {
                 let ref = firebase.database().ref('movies/' + this.state.imdbId);
-                ref.set({
+                ref.update({
                     imdbId: this.state.imdbId,
                     title: response.data.Title,
                     director: response.data.Director,
                     poster: response.data.Poster,
                     imdbRating: response.data.imdbRating,
-                    plot: response.data.Plot
+                    plot: response.data.Plot,
+                    actors: response.data.Actors
                 });
                 this.setState({imdbId: ""})
             })
